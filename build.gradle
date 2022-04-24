@@ -1,0 +1,26 @@
+plugins {
+	id 'java'
+	id 'scala'
+    id 'application'
+    id 'org.graalvm.buildtools.native'
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation 'org.scala-lang:scala-library:2.13.8'
+
+    implementation 'dev.zio:zio_2.13:2.0.0-RC5'
+
+    testImplementation 'dev.zio:zio-test_2.13:2.0.0-RC5'
+    testImplementation 'dev.zio:zio-test-junit_2.13:2.0.0-RC5'
+}
+
+
+application {
+    mainClass = 'zio.graalvm.ZioApp'
+}
+
