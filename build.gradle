@@ -3,24 +3,75 @@ plugins {
 	id 'scala'
     id 'application'
     id 'org.graalvm.buildtools.native'
+    id 'com.adarshr.test-logger' version '3.2.0'
 }
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
+    mavenLocal()
+
+/*     ivy {
+        url "file://${System.properties['user.home']}/.ivy2/local"
+        layout "maven"
+
+        // dev/zio/zio_2.13/2.0.0-RC5+12-ee36ad93+20220425-0036-SNAPSHOT/ivy-2.0.0-RC5+12-ee36ad93+20220425-0036-SNAPSHOT.xml
+        // dev.zio\zio-test_2.13\2.0.0-RC5+12-ee36ad93+20220425-0036-SNAPSHOT\jars\zio-test_2.13.jar 
+        // dev.zio\zio-test_2.13\2.0.0-RC5+12-ee36ad93+20220425-0036-SNAPSHOT\ivys\ivy.xml 
+        patternLayout {
+            artifact "[organisation]/[module]/[revision]/jars/[artifact].[ext]"
+            ivy "[organisation]/[module]/[revision]/ivys/ivy.xml"
+        }
+        // layout 'pattern', {
+        //     artifact "[organisation]/[module]/[revision]/[type]s/[artifact].[ext]"
+        //     ivy "[organisation]/[module]/[revision]/[type]s/[artifact].[ext]"
+        // }
+    }
+ */
 }
 
+def junitVersion = providers.gradleProperty('junit.jupiter.version')
+    .forUseAtConfigurationTime()
+    .get() 
 
 dependencies {
     implementation 'org.scala-lang:scala-library:2.13.8'
 
-    implementation 'dev.zio:zio_2.13:2.0.0-RC5'
+    implementation "dev.zio:zio_2.13:${getProperty('zio.version')}"
 
-    testImplementation 'dev.zio:zio-test_2.13:2.0.0-RC5'
-    testImplementation 'dev.zio:zio-test-junit_2.13:2.0.0-RC5'
+    testImplementation "dev.zio:zio-test_2.13:${getProperty('zio.version')}"
+    testImplementation "dev.zio:zio-test-junit_2.13:${getProperty('zio.version')}"
+
+    testImplementation(platform("org.junit:junit-bom:${junitVersion}"))
+    testImplementation('org.junit.jupiter:junit-jupiter')
 }
 
 
 application {
     mainClass = 'zio.graalvm.ZioApp'
 }
+
+
+// def zioScalaTest = tasks.register("zioScalaTest", Test) {
+//     testClassesDirs = sourceSets.test.scala.output.classesDirs
+//     classpath = sourceSets.test.scala.runtimeClasspath
+// }
+
+
+test {
+    useJUnitPlatform()
+}
+
+// tasks.withType(Test).configureEach {
+//     useJUnitPlatform()
+// }
+
+// tag::register-native-test[]
+// graalvmNative {
+//     registerTestBinary('zioScalaTest') {
+//         usingSourceSet(sourceSets.test.scala)
+//         forTestTask(zioScalaTest)
+//     }
+// }
+// end::register-native-test[]
 
