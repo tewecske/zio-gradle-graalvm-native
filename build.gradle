@@ -42,8 +42,8 @@ dependencies {
     testImplementation "dev.zio:zio-test_2.13:${getProperty('zio.version')}"
     testImplementation "dev.zio:zio-test-junit_2.13:${getProperty('zio.version')}"
 
-    testImplementation "org.scalatest:scalatest_2.13:3.2.12"
-    testImplementation "org.scalatestplus:junit-4-13_2.13:3.2.12.0"
+    // testImplementation "org.scalatest:scalatest_2.13:3.2.12"
+    // testImplementation "org.scalatestplus:junit-4-13_2.13:3.2.12.0"
     // testImplementation "co.helmethair:scalatest-junit-runner:0.1.10"
 
     // testImplementation "junit:junit:4.13.2"
@@ -87,8 +87,18 @@ graalvmNative {
         verbose = true // Add verbose output, defaults to false
         //buildArgs.add('--initialize-at-run-time=zio.Random,zio.Random$RandomLive$,zio.test.TestRandom$Test')
         buildArgs.add('--no-fallback')
-        buildArgs.add('--features=zio.graalvm.ReInitFeature')
-        buildArgs.add('--initialize-at-build-time=scala,org.scalactic.Prettifier$')
+        // buildArgs.add('--trace-class-initialization=zio.test.TestAspect$')
+        // buildArgs.add('--trace-object-instantiation=java.util.Random')
+        buildArgs.add('--initialize-at-build-time=scala')
+        // buildArgs.add('--trace-class-initialization=zio.internal.stacktracer.Tracer$,zio.Chunk$Empty$,zio.test.Live$,zio.Cause$,zio.internal.RingBufferArb,zio.internal.MutableQueueFieldsPadding,zio.Clock$,zio.test.Spec$,zio.test.TestPlatform$,izumi.reflect.macrortti.LightTypeTag$,zio.Fiber$,zio.ZEnv$,zio.Scope$,zio.ZLogger$,zio.package$,zio.ZEnvironment$,zio.test.ExecutionEventPrinter$,zio.LogLevel$,zio.ZLayer$,zio.Exit$,zio.test.TestDuration$,zio.test.TestAnnotation$,zio.ZEnv$Services$,zio.Supervisor$,zio.FiberRef$,zio.internal.FiberContext$,zio.internal.RingBufferPow2,zio.ZTraceElement$,zio.test.TestAnnotationRenderer$,zio.internal.Blocking$,zio.test.TestAspect$,zio.RuntimeConfigFlags$,zio.Chunk$,zio.ZIO$,zio.internal.RingBuffer,zio.test.package$')
+
+
+        // buildArgs.add('--trace-class-initialization=scala.collection.immutable.LazyList$')
+        // buildArgs.add('--trace-object-instantiation=scala.collection.immutable.LazyList$')
+        // buildArgs.add('--initialize-at-build-time=scala.collection.immutable.LazyList$')
+
+        // buildArgs.add('--features=zio.graalvm.ReInitFeature')
+        // buildArgs.add('--initialize-at-build-time=scala,org.scalactic.Prettifier$')
         // buildArgs.add('--allow-incomplete-classpath')
         // buildArgs.add('--initialize-at-build-time')
         // buildArgs.add('--initialize-at-build-time=scala,zio')
@@ -100,8 +110,8 @@ graalvmNative {
 // zio.Exit$,zio.stm.ZSTM$RetryException$,zio.ZEnv$,zio.internal.Blocking$,zio.test.TestAnnotationMap$,zio.test.Annotations$,zio.test.TestRandom$\
 // izumi')
         buildArgs.add('-H:+ReportExceptionStackTraces')
-        buildArgs.add('-H:ReflectionConfigurationFiles=/mnt/c/projects/zio-projects/zio-graalvm-spike/zio-gradle-graalvm-native/build/native/agent-output/run/reflect-config.json')
-        // buildArgs.add('-H:ConfigurationFileDirectories=/mnt/c/projects/zio-projects/zio-graalvm-spike/zio-gradle-graalvm-native/build/native/agent-output/run')
+        // buildArgs.add('-H:ReflectionConfigurationFiles=/mnt/c/projects/zio-projects/zio-graalvm-spike/zio-gradle-graalvm-native/build/native/agent-output/test/reflect-config.json')
+        // buildArgs.add('-H:ConfigurationFileDirectories=/mnt/c/projects/zio-projects/zio-graalvm-spike/zio-gradle-graalvm-native/build/native/agent-output/test')
         agent {
             enabled = true // Enables the reflection agent. Can be also set on command line using '-Pagent'
         }
