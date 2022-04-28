@@ -73,6 +73,42 @@ test {
 //     useJUnitPlatform()
 // }
 
+// --initialize-at-build-time=org.slf4j.simple.SimpleLogger
+
+// nativeBuild {
+//   imageName = "my-app"
+//   mainClass = "org.test.Main"
+//   verbose = true
+//   fallback = false
+// }
+
+graalvmNative {
+    binaries.all {
+        verbose = true // Add verbose output, defaults to false
+        //buildArgs.add('--initialize-at-run-time=zio.Random,zio.Random$RandomLive$,zio.test.TestRandom$Test')
+        buildArgs.add('--no-fallback')
+        buildArgs.add('--features=zio.graalvm.ReInitFeature')
+        buildArgs.add('--initialize-at-build-time=scala,org.scalactic.Prettifier$')
+        // buildArgs.add('--allow-incomplete-classpath')
+        // buildArgs.add('--initialize-at-build-time')
+        // buildArgs.add('--initialize-at-build-time=scala,zio')
+//         buildArgs.add('--initialize-at-build-time=scala,org.scalactic,\
+// zio.test.TestAnnotation$,zio.internal.RingBufferPow2,zio.internal.FiberContext$,zio.RuntimeConfigFlags$,zio.ZLogger$,zio.Fiber$,zio.test.Spec$,zio.Chunk$,\
+// zio.test.TestAspect$,zio.test.TestPlatform$,zio.Chunk$Empty$,zio.test.TestAnnotationRenderer$,zio.test.package$,zio.package$,zio.ZIO$,zio.Scope$,\
+// zio.System$,zio.test.TestClock$WarningData$,zio.test.TestConfig$,zio.Random$,zio.Clock$,zio.Cause$,zio.ZEnv$Services$,zio.test.TestClock$SuspendedWarningData$,\
+// zio.test.TestConsole$,zio.stm.ZSTM$,zio.FiberRef$,zio.test.package$TestEnvironment$,zio.ZEnvironment$,zio.test.TestClock$,zio.Duration$,zio.ZIO$InterruptStatusRestore$,\
+// zio.Exit$,zio.stm.ZSTM$RetryException$,zio.ZEnv$,zio.internal.Blocking$,zio.test.TestAnnotationMap$,zio.test.Annotations$,zio.test.TestRandom$\
+// izumi')
+        buildArgs.add('-H:+ReportExceptionStackTraces')
+        buildArgs.add('-H:ReflectionConfigurationFiles=/mnt/c/projects/zio-projects/zio-graalvm-spike/zio-gradle-graalvm-native/build/native/agent-output/run/reflect-config.json')
+        // buildArgs.add('-H:ConfigurationFileDirectories=/mnt/c/projects/zio-projects/zio-graalvm-spike/zio-gradle-graalvm-native/build/native/agent-output/run')
+        agent {
+            enabled = true // Enables the reflection agent. Can be also set on command line using '-Pagent'
+        }
+    }
+}
+
+
 // tag::register-native-test[]
 // graalvmNative {
 //     registerTestBinary('zioScalaTest') {

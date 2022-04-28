@@ -17,7 +17,7 @@ class ZioAppTest extends JUnitRunnableSpec {
                 output <- TestConsole.output
             } yield assert(output)(isNonEmpty)
         },
-        test("is GraalVN") {
+        test("is GraalVM") {
             assert(isJS)(equalTo(false)) &&
             assert(isJVM)(equalTo(true)) &&
             assert(isNative)(equalTo(false)) &&
